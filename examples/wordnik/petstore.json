@@ -1,85 +1,93 @@
 {
-  "swagger": 2.0,
-  "info": {
-    "version": "1.0.0",
-    "title": "Swagger Petstore",
-    "contact": {
-      "name": "wordnik api team",
-      "url": "http://developer.wordnik.com"
+    "swagger": 2.0,
+    "info": {
+        "version": "1.0.0",
+        "title": "Swagger Petstore",
+        "contact": {
+            "name": "wordnik api team",
+            "url": "http://developer.wordnik.com"
+        },
+        "license": {
+            "name": "Creative Commons 4.0 International",
+            "url": "http://creativecommons.org/licenses/by/4.0/"
+        }
     },
-    "license": {
-      "name": "Creative Commons 4.0 International",
-      "url": "http://creativecommons.org/licenses/by/4.0/"
-    }
-  },
-  "host": "http://petstore.swagger.wordnik.com",
-  "basePath": "/api",
-  "schemes": [
-    "http"
-  ],
-  "paths": {
-    "/pets": {
-      "get": {
-        "tags": [ "Pet Operations" ],
-        "summary": "finds pets in the system",
-        "responses": {
-          "200": {
-            "description": "pet response",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/models/Pet"
-              }
-            },
-            "headers": [{
-              "x-expires": {
-                "type": "string"
-              }
-            }]
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/models/Error"
+    "host": "http://petstore.swagger.wordnik.com",
+    "basePath": "/api",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/pets": {
+            "get": {
+                "tags": [ "Pet Operations" ],
+                "summary": "finds pets in the system",
+                "description": {
+                    "long-description": "Use to find any given pet in the system. Does not find pets in other stores.",
+                    "extended-doc": "http://docs.petstore.swagger.wordnik.com/pets"
+                },
+                "responses": {
+                    "200": {
+                        "description": "pet response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/models/Pet"
+                            }
+                        },
+                        "headers": [{
+                            "x-expires": {
+                                "type": "string"
+                            }
+                        }]
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/models/Error"
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  },
-  "schemas": {
-    "Pet": {
-      "required": [
-        "id",
-        "name"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tag": {
-          "type": "string"
-        }
-      }
     },
-    "Error": {
-      "required": [
-        "code",
-        "message"
-      ],
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
+    "schemas": {
+        "Pet": {
+            "required": [
+                "id",
+                "name"
+            ],
+            "description": {
+                "long-description": "A pet of any variety and breed.",
+                "extended-doc": "http://docs.petstore.swagger.wordnik.com/models/pet"
+            },
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
         },
-        "message": {
-          "type": "string"
+        "Error": {
+            "required": [
+                "code",
+                "message"
+            ],
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
         }
-      }
     }
-  }
 }
