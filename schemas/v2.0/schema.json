@@ -106,7 +106,12 @@
 				},
 				"description": {
 					"type": "string",
-					"description": "A longer description of the operation."
+					"description": "A longer description of the operation, markdown is allowed."
+				},
+				"docsUrl": {
+					"type": "string",
+					"format": "uri",
+					"description": "Location of external documentation."
 				},
 				"operationId": {
 					"type": "string",
@@ -169,7 +174,7 @@
 				"headers": {
 					"type": "array",
 					"items": {
-						"$ref": "#/definitions/schema"
+						"$ref": "#/definitions/serializableType"
 					}
 				},
 				"examples": {
@@ -178,6 +183,23 @@
 			},
 			"additionalProperties": false
 		},
+		"serializableType": {
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [ "string", "number", "boolean", "integer", "array" ]
+				},
+				"format": {
+					"type": "string"
+				},
+				"items": {
+					"type": "object"
+				},
+				"collectionFormat": {
+					"type": "string"
+				}
+			}
+		},
 		"vendorExtension": {
 			"description": "Any property starting with x- is valid.",
 			"additionalProperties": true,
@@ -185,35 +207,81 @@
 		},
 		"parameter": {
 			"type": "object",
-			"required": [ "name", "in", "schema" ],
-			"patternProperties": {
-				"^x-": {
-					"$ref": "#/definitions/vendorExtension"
+			"required": [ "name", "in" ],
+			"oneOf": [
+				{
+					"patternProperties": {
+						"^x-": {
+							"$ref": "#/definitions/vendorExtension"
+						}
+					},
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "The name of the parameter."
+						},
+						"in": {
+							"type": "string",
+							"description": "Determines the location of the parameter.",
+							"enum": [ "query", "header", "path", "formData" ],
+							"default": "query"
+						},
+						"description": {
+							"type": "string",
+							"description": "A brief description of the parameter. This could contain examples of use."
+						},
+						"required": {
+							"type": "boolean",
+							"description": "Determines whether or not this parameter is required or optional."
+						},
+						"type": {
+							"type": "string",
+							"enum": [ "string", "number", "boolean", "integer", "array" ]
+						},
+						"format": {
+							"type": "string"
+						},
+						"items": {
+							"type": "object"
+						},
+						"collectionFormat": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"patternProperties": {
+						"^x-": {
+							"$ref": "#/definitions/vendorExtension"
+						}
+					},
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "The name of the parameter."
+						},
+						"in": {
+							"type": "string",
+							"description": "Determines the location of the parameter.",
+							"enum": [ "body" ],
+							"default": "body"
+						},
+						"description": {
+							"type": "string",
+							"description": "A brief description of the parameter. This could contain examples of use."
+						},
+						"required": {
+							"type": "boolean",
+							"description": "Determines whether or not this parameter is required or optional."
+						},
+						"schema": {
+							"$ref": "#/definitions/schema"
+						}
+					},
+					"additionalProperties": false
 				}
-			},
-			"properties": {
-				"name": {
-					"type": "string",
-					"description": "The name of the parameter."
-				},
-				"in": {
-					"type": "string",
-					"description": "Determines the location of the parameter.",
-					"enum": [ "query", "header", "path", "formData", "body" ],
-					"default": "query"
-				},
-				"description": {
-					"type": "string",
-					"description": "A brief description of the parameter. This could contain examples of use."
-				},
-				"required": {
-					"type": "boolean",
-					"description": "Determines whether or not this parameter is required or optional."
-				},
-				"schema": {
-					"$ref": "#/definitions/schema"
-				}
-			}
+			]
 		},
 		"schema": {
 			"type": "object",
@@ -233,7 +301,7 @@
 				"maximum": { "$ref": "http://json-schema.org/draft-04/schema#/properties/maximum" },
 				"exclusiveMaximum": { "$ref": "http://json-schema.org/draft-04/schema#/properties/exclusiveMaximum" },
 				"minimum": { "$ref": "http://json-schema.org/draft-04/schema#/properties/minimum" },
-				"exclusiveMinimum": { "$ref": "http://json-schema.org/draft-04/schema#/properties/exclusiveMiminum" },
+				"exclusiveMinimum": { "$ref": "http://json-schema.org/draft-04/schema#/properties/exclusiveMininum" },
 				"maxLength": { "$ref": "http://json-schema.org/draft-04/schema#/definitions/positiveInteger" },
 				"minLength": { "$ref": "http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0" },
 				"pattern": { "$ref": "http://json-schema.org/draft-04/schema#/properties/pattern" },
@@ -303,6 +371,7 @@
 		"host": {
 			"type": "string",
 			"format": "uri",
+			"pattern": "^((?!\\:\/\/).)*$",
 			"description": "The fully qualified URI to the host of the API."
 		},
 		"basePath": {
@@ -352,6 +421,9 @@
 					}
 				},
 				"properties": {
+					"$ref": {
+						"type": "string"
+					},
 					"get": {
 						"$ref": "#/definitions/operation"
 					},
@@ -382,7 +454,7 @@
 				}
 			}
 		},
-		"schemas": {
+		"definitions": {
 			"type": "object",
 			"description": "One or more JSON objects describing the schemas being consumed and produced by the API.",
 			"additionalProperties": {

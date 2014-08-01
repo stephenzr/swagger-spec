@@ -29,43 +29,7 @@
   ],
   "paths": {
     "/pets/{petId}": {
-      "get": {
-        "description": "Returns a pet based on ID",
-        "summary": "Find pet by ID",
-        "operationId": "getPetsById",
-        "produces": [
-          "application/json",
-          "text/html"
-        ],
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet that needs to be fetched",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "csv"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "pet response",
-            "schema": {
-              "$ref": "Pet"
-            }
-          },
-          "default": {
-            "description": "error payload",
-            "schema": {
-              "$ref": "ErrorModel"
-            }
-          }
-        },
-        "schemes": [ "https" ]
-      }
+      "$ref": "https://raw.githubusercontent.com/reverb/swagger-spec/master/samples/2.0/json/resources/resourceWithLinkedDefinitions_part1.json"
     }
   },
   "definitions": {
